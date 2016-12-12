@@ -1,15 +1,29 @@
 <div class="row">
-   <div class="col-md-12">
-      <label>
-          Address:
-          <input type="text" ng-model="vm.address" ng-model-options="{debounce: 1000}" ng-change="vm.runAddressSearch()" >
-      </label>
+    <div class="col-md-12">
+        <label>
+            Address:
+            <input type="text" ng-model="vm.address" ng-model-options="{debounce: 1000}" ng-change="vm.runAddressSearch()" >
+        </label>
+        <label>
+            Location Type:
+            <select ng-model="vm.locationType" ng-model-options="{debounce: 1000}">
+                <option value="branches">Branches</option>
+                <option value="specialists">Specialists</option>
+                <option value="treatments">Treatments</option>
+                <option value="information_points">Information Points</option>
+                <option value="support_groups">Support Groups</option>
+                <option value="information_events">Information Events</option>
+                <option value="fundraising_events">Fundraising Events</option>
+                <option value="financial_aid">Financial Aid</option>
+                <option value="branch_event">Branch Event</option>
+            </select>
+        </label>
    </div>
 </div>
 <div class="row">
    <div class="col-md-12">
       <div class="map-container">
-        <google-maps-visualisation val="vm.markers" home-location="vm.homeLocation"></google-maps-visualisation>
+        <google-maps-visualisation val="vm.markers" home-location="vm.homeLocation" location-type="vm.locationType"></google-maps-visualisation>
       </div>
    </div>
 </div>

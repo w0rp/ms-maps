@@ -8,6 +8,7 @@ angular.module('msMapsApp.directives.map', [])
   scope: {
     val: '=',
     homeLocation: '=',
+    locationType: '=',
   },
   link: function(scope, element, attrs) {
     const societyURL = 'https://www.mssociety.org.uk'
@@ -92,6 +93,7 @@ angular.module('msMapsApp.directives.map', [])
         const markerImage = markerImageMap[item.type] || markerImageMap.branches
 
         location.htmlTemplate = item.bubble
+        location.type = item.type
         location.infoWindow = new google.maps.InfoWindow({content: ''})
         location.marker = new google.maps.Marker({
           position: {lat: item.lat, lng: item.lng},
@@ -99,6 +101,10 @@ angular.module('msMapsApp.directives.map', [])
           title: item.title,
           icon: markerImage,
         })
+
+        if (item.type !== scope.locationType) {
+          location.marker.setVisible(false)
+        }
 
         location.marker.addListener('click', () => {
           if (lastWindowOpen != null) {
@@ -134,8 +140,26 @@ angular.module('msMapsApp.directives.map', [])
 
     updateInfoWindows()
 
+    function updateVisibility() {
+      Object.keys(mapLocations)
+        .map(key => mapLocations[key])
+        .forEach(location => {
+          if (location.type === scope.locationType) {
+            location.marker.setVisible(true)
+          } else {
+            location.marker.setVisible(false)
+          }
+        })
+    }
+
+    updateVisibility()
+
     scope.$watch('homeLocation', () => {
       updateInfoWindows()
+    })
+
+    scope.$watch('locationType', () => {
+      updateVisibility()
     })
   },
 }))

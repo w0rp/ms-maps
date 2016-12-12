@@ -16,6 +16,7 @@ angular.module('msMapsApp.main', [
   var vm = this
 
   vm.markers = markers
+  vm.locationType = 'branches'
   vm.homeLocation = {lat: 51.56, lng: -0.25}
 
   vm.runAddressSearch = () => {
