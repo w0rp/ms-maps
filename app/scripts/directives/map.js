@@ -115,8 +115,9 @@ angular.module('msMapsApp.directives.map', [])
           map: map,
           radius: 4000,
           fillColor: '#' + (colorMap[item.type] || colorMap.branches),
-          fillOpacity: 0.5,
-          strokeWeight: 0,
+          fillOpacity: 0.05,
+          strokeWeight: 1,
+          strokeColor: '#' + (colorMap[item.type] || colorMap.branches),
         })
         location.circle.bindTo('center', location.marker, 'position')
 
