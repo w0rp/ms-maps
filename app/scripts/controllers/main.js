@@ -27,7 +27,7 @@ angular.module('msMapsApp.main', [
     vm.formattedAddress = geocodeResults[0].formatted_address
   }
 
-  function lookupAdddres(latLng) {
+  function lookupAddress(latLng) {
     geocoder.geocode({location: latLng}, (results, status) => {
       if (status === 'OK') {
         updateAddress(results)
@@ -63,7 +63,7 @@ angular.module('msMapsApp.main', [
   /* Get the location somehow, and update the address when we are done */
   getLocation(location => {
     vm.homeLocation = location
-    lookupAdddres(location)
+    lookupAddress(location)
   })
 
   vm.runAddressSearch = () => {
