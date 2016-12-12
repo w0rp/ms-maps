@@ -27,7 +27,7 @@ body {
   margin-bottom: 10px;
 }
 /* Make the masthead heading the same height as the navigation */
-.header h3 {
+.header h3 { /* csslint allow: qualified-headings */
   line-height: 40px;
   margin-bottom: 0;
   margin-top: 0;
@@ -59,7 +59,7 @@ body {
 .marketing {
   margin: 40px 0;
 }
-.marketing p + h4 {
+.marketing p + h4 { /* csslint allow: qualified-headings */
   margin-top: 28px;
 }
 

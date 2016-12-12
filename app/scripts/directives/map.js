@@ -80,11 +80,9 @@ angular.module('msMapsApp.directives.map', [])
     }
 
     function mapRender(newMapData) {
-      var coords = {}
-
-      var map = new google.maps.Map(d3.select(element[0]).node(), {
-        zoom: 8,
-        center: new google.maps.LatLng(51.56, -0.25),
+      const map = new google.maps.Map(d3.select(element[0]).node(), {
+        zoom: 12,
+        center: new google.maps.LatLng(scope.homeLocation.lat, scope.homeLocation.lng),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
       })
 
@@ -132,9 +130,11 @@ angular.module('msMapsApp.directives.map', [])
           lastWindowOpen = location.infoWindow
         })
       })
+
+      return map
     }
 
-    mapRender(scope.val)
+    const map = mapRender(scope.val)
 
     function updateInfoWindows() {
       Object.keys(mapLocations).forEach(itemKey => {
@@ -166,6 +166,8 @@ angular.module('msMapsApp.directives.map', [])
 
     scope.$watch('homeLocation', () => {
       updateInfoWindows()
+
+      map.setCenter(new google.maps.LatLng(scope.homeLocation.lat, scope.homeLocation.lng))
     })
 
     scope.$watch('locationType', () => {
