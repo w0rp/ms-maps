@@ -1,3 +1,4 @@
-<div class="jumbotron">
-    <p>Drop your map here, Ben, or whatever</p>
+<div>
+  <input type="text" ng-model="vm.address" ng-model-options="{debounce: 1000}" ng-change="vm.runAddressSearch()" >
+  <google-maps-visualisation val="vm.markers" home-location="vm.homeLocation" style="position: absolute; width: 800px; height: 800px"></google-maps-visualisation>
 </div>
