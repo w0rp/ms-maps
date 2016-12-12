@@ -17,20 +17,25 @@ angular.module('msMapsApp.main', [
 
   vm.markers = markers
   vm.locationType = 'branches'
-  vm.homeLocation = {lat: 51.56, lng: -0.25}
+  vm.homeLocation = Object.freeze({lat: 51.56, lng: -0.25})
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(position => {
+      vm.homeLocation = Object.freeze({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      })
+    })
+  }
 
   vm.runAddressSearch = () => {
-    console.log('running address search')
-
     const geocoder = new google.maps.Geocoder()
 
     geocoder.geocode({address: vm.address}, (results, status) => {
-      console.log(status)
-
       if (status === 'OK') {
         const location = results[0].geometry.location
 
-        vm.homeLocation = {lat: location.lat(), lng: location.lng()}
+        vm.homeLocation = Object.freeze({lat: location.lat(), lng: location.lng()})
       } else {
         /* Show an error here? */
       }

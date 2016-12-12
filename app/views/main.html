@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-md-12">
         <label>
-            Address:
+            Enter an Address:
             <input type="text" ng-model="vm.address" ng-model-options="{debounce: 1000}" ng-change="vm.runAddressSearch()" >
         </label>
         <label>
-            Location Type:
+            Select a Location Type:
             <select ng-model="vm.locationType" ng-model-options="{debounce: 1000}">
                 <option value="branches">Branches</option>
                 <option value="specialists">Specialists</option>
