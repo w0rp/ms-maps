@@ -19,7 +19,7 @@ angular.module('msMapsApp.main', [
   const geocoder = new google.maps.Geocoder()
 
   vm.markers = markers
-  vm.locationType = 'branches'
+  vm.locationType = 'all'
   vm.homeLocation = defaultLocation
   vm.formattedAddress = ''
 

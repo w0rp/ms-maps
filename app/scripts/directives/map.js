@@ -71,6 +71,13 @@ angular.module('msMapsApp.directives.map', [])
 
     const mapLocations = {}
 
+    function setLocationVisibility(location) {
+      location.marker.setVisible(
+        scope.locationType === 'all'
+        || location.type === scope.locationType
+      )
+    }
+
     function mapRender(newMapData) {
       var coords = {}
 
@@ -102,9 +109,7 @@ angular.module('msMapsApp.directives.map', [])
           icon: markerImage,
         })
 
-        if (item.type !== scope.locationType) {
-          location.marker.setVisible(false)
-        }
+        setLocationVisibility(location)
 
         location.marker.addListener('click', () => {
           if (lastWindowOpen != null) {
@@ -143,13 +148,7 @@ angular.module('msMapsApp.directives.map', [])
     function updateVisibility() {
       Object.keys(mapLocations)
         .map(key => mapLocations[key])
-        .forEach(location => {
-          if (location.type === scope.locationType) {
-            location.marker.setVisible(true)
-          } else {
-            location.marker.setVisible(false)
-          }
-        })
+        .forEach(location => { setLocationVisibility(location) })
     }
 
     updateVisibility()
