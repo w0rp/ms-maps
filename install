@@ -1,0 +1,7 @@
+#!/bin/bash -eu
+
+rm -rf node_modules
+rm -rf bower_components
+
+yarn install
+node_modules/.bin/bower install
