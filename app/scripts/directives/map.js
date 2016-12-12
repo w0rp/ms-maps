@@ -72,10 +72,11 @@ angular.module('msMapsApp.directives.map', [])
     const mapLocations = {}
 
     function setLocationVisibility(location) {
-      location.marker.setVisible(
-        scope.locationType === 'all'
+      const visibility = scope.locationType === 'all'
         || location.type === scope.locationType
-      )
+
+      location.marker.setVisible(visibility)
+      location.circle.setVisible(visibility)
     }
 
     function mapRender(newMapData) {
@@ -108,6 +109,16 @@ angular.module('msMapsApp.directives.map', [])
           title: item.title,
           icon: markerImage,
         })
+
+        // Add circle overlay and bind to marker
+        location.circle = new google.maps.Circle({
+          map: map,
+          radius: 4000,
+          fillColor: '#' + (colorMap[item.type] || colorMap.branches),
+          fillOpacity: 0.5,
+          strokeWeight: 0,
+        })
+        location.circle.bindTo('center', location.marker, 'position')
 
         setLocationVisibility(location)
 
