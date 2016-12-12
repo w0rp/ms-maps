@@ -22,7 +22,7 @@ angular.module('msMapsApp.directives.map', [])
       information_events: '00A482',
       fundraising_events: '818F98',
       financial_aid: 'BAC733',
-      branch_event: '0B3326',
+      branch_events: '0B3326',
     }
 
     const markerImageMap = {}
@@ -137,6 +137,18 @@ angular.module('msMapsApp.directives.map', [])
     const map = mapRender(scope.val)
 
     function updateInfoWindows() {
+      var closerTypes = {
+        branches: {id: null, distance: null},
+        specialists: {id: null, distance: null},
+        treatments: {id: null, distance: null},
+        information_points: {id: null, distance: null},
+        support_groups: {id: null, distance: null},
+        information_events: {id: null, distance: null},
+        fundraising_events: {id: null, distance: null},
+        financial_aid: {id: null, distance: null},
+        branch_events: {id: null, distance: null},
+      }
+
       Object.keys(mapLocations).forEach(itemKey => {
         const location = mapLocations[itemKey]
         const locationCoords = {
@@ -144,6 +156,11 @@ angular.module('msMapsApp.directives.map', [])
           lng: location.marker.getPosition().lng(),
         }
         const metersDistance = getDistance(scope.homeLocation, locationCoords)
+
+        if (closerTypes[location.type].id == null || closerTypes[location.type]['distance'] > metersDistance) {
+          closerTypes[location.type].id = itemKey
+          closerTypes[location.type]['distance'] = metersDistance
+        }
 
         location.infoWindow.setContent(
           location.htmlTemplate
