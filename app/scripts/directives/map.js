@@ -9,8 +9,10 @@ angular.module('msMapsApp.directives.map', [])
     val: '=',
     homeLocation: '=',
     locationType: '=',
+    shouldShowDistanceInMiles: '=',
   },
   link: function(scope, element, attrs) {
+    const milesCoefficient = 0.621371
     const societyURL = 'https://www.mssociety.org.uk'
     const markerBaseURL = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"
     const colorMap = {
@@ -164,7 +166,10 @@ angular.module('msMapsApp.directives.map', [])
 
         location.infoWindow.setContent(
           location.htmlTemplate
-            .replace('!miles', (metersDistance / 1000).toFixed(2) + 'km')
+            .replace('!miles', scope.shouldShowDistanceInMiles
+              ? (metersDistance / 1000 * milesCoefficient).toFixed(2) + ' miles'
+              : (metersDistance / 1000).toFixed(2) + 'km'
+            )
             .replace(/href="(\/near-me[^"]+)"/, 'href="' + societyURL + '$1"')
             .replace('<a', '<a target="_blank"')
         )
@@ -185,6 +190,10 @@ angular.module('msMapsApp.directives.map', [])
       updateInfoWindows()
 
       map.setCenter(new google.maps.LatLng(scope.homeLocation.lat, scope.homeLocation.lng))
+    })
+
+    scope.$watch('shouldShowDistanceInMiles', () => {
+      updateInfoWindows()
     })
 
     scope.$watch('locationType', () => {

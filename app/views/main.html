@@ -3,7 +3,7 @@
         <p>Your Location: {{vm.formattedAddress}}</p>
    </div>
 </div>
-<div class="row">
+<div class="row map-controls">
     <div class="col-md-12">
         <label>
             Enter an Address:
@@ -24,12 +24,21 @@
                 <option value="branch_events">Branch Events</option>
             </select>
         </label>
+        <label>
+            Show distance in miles?
+            <input type="checkbox" ng-model="vm.shouldShowDistanceInMiles">
+        </label>
    </div>
 </div>
 <div class="row">
    <div class="col-md-12">
       <div class="map-container">
-        <google-maps-visualisation val="vm.markers" home-location="vm.homeLocation" location-type="vm.locationType"></google-maps-visualisation>
+        <google-maps-visualisation
+            val="vm.markers"
+            home-location="vm.homeLocation"
+            location-type="vm.locationType"
+            should-show-distance-in-miles="vm.shouldShowDistanceInMiles"
+        ></google-maps-visualisation>
       </div>
    </div>
 </div>
