@@ -1,4 +1,15 @@
-<div>
-  <input type="text" ng-model="vm.address" ng-model-options="{debounce: 1000}" ng-change="vm.runAddressSearch()" >
-  <google-maps-visualisation val="vm.markers" home-location="vm.homeLocation" style="position: absolute; width: 800px; height: 800px"></google-maps-visualisation>
+<div class="row">
+   <div class="col-md-12">
+      <label>
+          Address:
+          <input type="text" ng-model="vm.address" ng-model-options="{debounce: 1000}" ng-change="vm.runAddressSearch()" >
+      </label>
+   </div>
+</div>
+<div class="row">
+   <div class="col-md-12">
+      <div class="map-container">
+        <google-maps-visualisation val="vm.markers" home-location="vm.homeLocation"></google-maps-visualisation>
+      </div>
+   </div>
 </div>

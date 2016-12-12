@@ -10,6 +10,8 @@ angular.module('msMapsApp.directives.map', [])
     homeLocation: '=',
   },
   link: function(scope, element, attrs) {
+    const societyURL = 'https://www.mssociety.org.uk'
+    const markerBaseURL = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"
     const colorMap = {
       branches: 'F76300',
       specialists: 'CC0066',
@@ -21,6 +23,21 @@ angular.module('msMapsApp.directives.map', [])
       financial_aid: 'BAC733',
       branch_event: '0B3326',
     }
+
+    const markerImageMap = {}
+
+    Object.keys(colorMap).forEach(id => {
+      const color = colorMap[id]
+
+      const markerImage = new google.maps.MarkerImage(
+        markerBaseURL + color,
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0, 0),
+        new google.maps.Point(10, 34)
+      )
+
+      markerImageMap[id] = markerImage
+    })
 
     function getCenter(coordsInput) {
       var totalLng = 0
@@ -59,7 +76,7 @@ angular.module('msMapsApp.directives.map', [])
       var map = new google.maps.Map(d3.select(element[0]).node(), {
         zoom: 8,
         center: new google.maps.LatLng(51.56, -0.25),
-        mapTypeId: google.maps.MapTypeId.TERRAIN,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
       })
 
       let lastWindowOpen = null
@@ -70,25 +87,23 @@ angular.module('msMapsApp.directives.map', [])
         const location = {}
         mapLocations[itemKey] = location
 
+        // Get the coloured icon for the location,
+        // default to the same icon used for branches.
+        const markerImage = markerImageMap[item.type] || markerImageMap.branches
+
         location.htmlTemplate = item.bubble
         location.infoWindow = new google.maps.InfoWindow({content: ''})
         location.marker = new google.maps.Marker({
           position: {lat: item.lat, lng: item.lng},
           map: map,
-          title: 'Uluru (Ayers Rock)',
+          title: item.title,
+          icon: markerImage,
         })
 
         location.marker.addListener('click', () => {
           if (lastWindowOpen != null) {
             lastWindowOpen.close()
           }
-
-          const metersDistance = getDistance(scope.homeLocation, item)
-
-          location.infoWindow.setContent(item.bubble.replace(
-            '!miles',
-            (metersDistance / 1000).toFixed(2) + 'km'
-          ))
 
           location.infoWindow.open(map, location.marker)
 
@@ -108,10 +123,12 @@ angular.module('msMapsApp.directives.map', [])
         }
         const metersDistance = getDistance(scope.homeLocation, locationCoords)
 
-        location.infoWindow.setContent(location.htmlTemplate.replace(
-          '!miles',
-          (metersDistance / 1000).toFixed(2) + 'km'
-        ))
+        location.infoWindow.setContent(
+          location.htmlTemplate
+            .replace('!miles', (metersDistance / 1000).toFixed(2) + 'km')
+            .replace(/href="(\/near-me[^"]+)"/, 'href="' + societyURL + '$1"')
+            .replace('<a', '<a target="_blank"')
+        )
       })
     }
 

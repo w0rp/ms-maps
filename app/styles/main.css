@@ -1,8 +1,12 @@
 .browsehappy {
-  margin: 0.2em 0;
   background: #ccc;
   color: #000;
+  margin: 0.2em 0;
   padding: 0.2em 0;
+}
+
+* { /* csslint allow: universal-selector */
+  box-sizing: border-box; /* csslint allow: box-sizing */
 }
 
 body {
@@ -24,17 +28,17 @@ body {
 }
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
-  margin-top: 0;
-  margin-bottom: 0;
   line-height: 40px;
+  margin-bottom: 0;
+  margin-top: 0;
   padding-bottom: 19px;
 }
 
 /* Custom page footer */
 .footer {
-  padding-top: 19px;
-  color: #777;
   border-top: 1px solid #e5e5e5;
+  color: #777;
+  padding-top: 19px;
 }
 
 .container-narrow > hr {
@@ -43,8 +47,8 @@ body {
 
 /* Main marketing message and sign up button */
 .jumbotron {
-  text-align: center;
   border-bottom: 1px solid #e5e5e5;
+  text-align: center;
 }
 .jumbotron .btn {
   font-size: 21px;
@@ -59,21 +63,17 @@ body {
   margin-top: 28px;
 }
 
-.stations, .stations svg {
+.map-container {
+  height: 450px;
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+}
+
+.map-container > google-maps-visualisation {
+  height: 100%;
   position: absolute;
-}
-
-.stations svg {
-  width: 60px;
-  height: 20px;
-  padding-right: 100px;
-  font: 10px sans-serif;
-}
-
-.stations circle {
-  fill: brown;
-  stroke: black;
-  stroke-width: 1.5px;
+  width: 100%;
 }
 
 /* Responsive: Portrait tablets and up */
