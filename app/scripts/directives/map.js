@@ -10,6 +10,18 @@ angular.module('msMapsApp.directives.map', [])
     homeLocation: '=',
   },
   link: function(scope, element, attrs) {
+    const colorMap = {
+      branches: 'F76300',
+      specialists: 'CC0066',
+      treatments: '0057A3',
+      information_points: '004354',
+      support_groups: '5A1B55',
+      information_events: '00A482',
+      fundraising_events: '818F98',
+      financial_aid: 'BAC733',
+      branch_event: '0B3326',
+    }
+
     function getCenter(coordsInput) {
       var totalLng = 0
       var totalLat = 0
