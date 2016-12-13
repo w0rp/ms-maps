@@ -25,7 +25,6 @@ angular.module('msMapsApp.directives.map', [])
       support_groups: '5A1B55',
       information_events: '00A482',
       fundraising_events: '818F98',
-      financial_aid: 'BAC733',
       branch_events: '0B3326',
     }
 
@@ -151,17 +150,11 @@ angular.module('msMapsApp.directives.map', [])
     const map = mapRender(scope.val)
 
     function updateInfoWindows() {
-      closerTypes = {
-        branches: {id: null, distance: null},
-        specialists: {id: null, distance: null},
-        treatments: {id: null, distance: null},
-        information_points: {id: null, distance: null},
-        support_groups: {id: null, distance: null},
-        information_events: {id: null, distance: null},
-        fundraising_events: {id: null, distance: null},
-        financial_aid: {id: null, distance: null},
-        branch_events: {id: null, distance: null},
-      }
+      closerTypes = {}
+
+      Object.keys(colorMap).forEach(type => {
+        closerTypes[type] = {id: null, distance: null}
+      })
 
       Object.keys(mapLocations).forEach(itemKey => {
         const location = mapLocations[itemKey]
@@ -204,6 +197,7 @@ angular.module('msMapsApp.directives.map', [])
       updateInfoWindows()
 
       map.setCenter(new google.maps.LatLng(scope.homeLocation.lat, scope.homeLocation.lng))
+      updateVisibility()
     })
 
     scope.$watch('shouldShowDistanceInMiles', () => {
