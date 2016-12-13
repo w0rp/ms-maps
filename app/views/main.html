@@ -50,18 +50,15 @@
         </form>
     </div>
     <div class="col-md-3">
-        <form class="map-secondary-controls">
+        <form class="map-secondary-controls" ng-show="vm.lastDirectionsLocation != null">
+            <p>Choose your method of travel for directions.</p>
             <div class="form-group">
-                <input type="checkbox" ng-model="vm.driving" ng-change="vm.updateTravelMethodToDriving()">
-                <label>Driving</label>
-            </div>
-            <div class="form-group">
-                <input type="checkbox" ng-model="vm.walking" ng-change="vm.updateTravelMethodToWalking()">
-                <label>Walking</label>
-            </div>
-            <div class="form-group">
-                <input type="checkbox" ng-model="vm.transit" ng-change="vm.updateTravelMethodToTransit()">
-                <label>Public Transport</label>
+                <label>Travel Method</label>
+                <select ng-model="vm.travelMethod">
+                    <option value="DRIVING">Driving</option>
+                    <option value="WALKING">Walking</option>
+                    <option value="TRANSIT">Public Transport</option>
+                </select>
             </div>
         </form>
     </div>
@@ -80,6 +77,7 @@
             should-show-markers="vm.shouldShowMarkers"
             should-show-coverage="vm.shouldShowCoverage"
             travel-method="vm.travelMethod"
+            last-directions-location="vm.lastDirectionsLocation"
         ></google-maps-visualisation>
       </div>
    </div>

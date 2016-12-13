@@ -29,6 +29,7 @@ angular.module('msMapsApp.directives.map', [])
     shouldShowCoverage: '=',
     // This binding describes the travel method to use for the directions.
     travelMethod: '=',
+    lastDirectionsLocation: '=',
   },
   link: function(scope, element, attrs) {
     'use strict'
@@ -100,7 +101,6 @@ angular.module('msMapsApp.directives.map', [])
       location.circle.setVisible(visible && scope.shouldShowCoverage)
     }
 
-    // This variable will track the last marker window we have opened
     let lastWindowOpen = null
 
     const renderMap = () => {
@@ -186,6 +186,8 @@ angular.module('msMapsApp.directives.map', [])
       icon: 'https://maps.gstatic.com/mapfiles/ms2/micons/man.png',
     })
 
+    let lastDirectionsLocation = null
+
     // Given a location, calculate a route to the location from the user's
     // location, and draw the route on the map.
     const calcRouteToLocation = location => {
@@ -199,6 +201,7 @@ angular.module('msMapsApp.directives.map', [])
       const request = {
         origin: start,
         destination: end,
+        // The travel method is taken from the binding.
         travelMode: google.maps.TravelMode[scope.travelMethod],
       }
       const directionsService = new google.maps.DirectionsService()
@@ -206,6 +209,8 @@ angular.module('msMapsApp.directives.map', [])
       // Request directions from point A to B.
       directionsService.route(request, (response, status) => {
         if (status === google.maps.DirectionsStatus.OK) {
+          scope.lastDirectionsLocation = location
+
           // Focus on the route we drew
           map.fitBounds(bounds)
           // Set up the directions to draw on the map.
@@ -312,9 +317,11 @@ angular.module('msMapsApp.directives.map', [])
     scope.$watch('locationType', () => {
       updateVisibility()
     })
+    // Change the directions when the travel method changes.
     scope.$watch('travelMethod', () => {
-      map.setCenter(new google.maps.LatLng(scope.homeLocation.lat, scope.homeLocation.lng))
-      directionsDisplay.setMap(null)
+      if (scope.lastDirectionsLocation) {
+        calcRouteToLocation(scope.lastDirectionsLocation)
+      }
     })
   },
 }))
