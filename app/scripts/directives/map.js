@@ -15,11 +15,13 @@ angular.module('msMapsApp.directives.map', [])
     shouldShowCoverage: '=',
   },
   link: function(scope, element, attrs) {
-    var closerTypes
+    'use strict'
+
+    const directionsDisplay = new google.maps.DirectionsRenderer()
     const milesCoefficient = 0.621371
     const societyURL = 'https://www.mssociety.org.uk'
     const markerBaseURL = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"
-    const colorMap = {
+    const colorMap = Object.freeze({
       branches: 'F76300',
       specialists: 'CC0066',
       treatments: '0057A3',
@@ -28,9 +30,9 @@ angular.module('msMapsApp.directives.map', [])
       information_events: '00A482',
       fundraising_events: '818F98',
       branch_events: '0B3326',
-    }
-
+    })
     const markerImageMap = {}
+    let closerTypes = {}
 
     Object.keys(colorMap).forEach(id => {
       const color = colorMap[id]
@@ -44,6 +46,8 @@ angular.module('msMapsApp.directives.map', [])
 
       markerImageMap[id] = markerImage
     })
+
+    Object.freeze(markerImageMap)
 
     function getCenter(coordsInput) {
       var totalLng = 0
@@ -92,14 +96,14 @@ angular.module('msMapsApp.directives.map', [])
       location.circle.setVisible(visible && scope.shouldShowCoverage)
     }
 
+    let lastWindowOpen = null
+
     function mapRender(newMapData) {
       const map = new google.maps.Map(d3.select(element[0]).node(), {
         zoom: 12,
         center: new google.maps.LatLng(scope.homeLocation.lat, scope.homeLocation.lng),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
       })
-
-      let lastWindowOpen = null
 
       Object.keys(newMapData).forEach((itemKey) => {
         var item = newMapData[itemKey]
@@ -111,7 +115,13 @@ angular.module('msMapsApp.directives.map', [])
         // default to the same icon used for branches.
         const markerImage = markerImageMap[item.type] || markerImageMap.branches
 
+        location.lat = item.lat
+        location.lng = item.lng
+        location.id = itemKey
         location.htmlTemplate = item.bubble
+          + '<button type="button" data-location-id="'
+          + location.id
+          + '">Show Directions</button>'
         location.type = item.type
         location.infoWindow = new google.maps.InfoWindow({content: ''})
         location.marker = new google.maps.Marker({
@@ -120,7 +130,6 @@ angular.module('msMapsApp.directives.map', [])
           title: item.title,
           icon: markerImage,
         })
-        location.id = itemKey
 
         // Add circle overlay and bind to marker
         location.circle = new google.maps.Circle({
@@ -138,8 +147,8 @@ angular.module('msMapsApp.directives.map', [])
         location.marker.addListener('click', () => {
           if (lastWindowOpen != null) {
             lastWindowOpen.close()
+            directionsDisplay.setMap(null)
           }
-
           location.infoWindow.open(map, location.marker)
 
           lastWindowOpen = location.infoWindow
@@ -150,6 +159,52 @@ angular.module('msMapsApp.directives.map', [])
     }
 
     const map = mapRender(scope.val)
+
+    const homeMarker = new google.maps.Marker({
+      position: {lat: scope.homeLocation.lat, lng: scope.homeLocation.lng},
+      map: map,
+      title: 'You are here',
+      icon: 'https://maps.gstatic.com/mapfiles/ms2/micons/man.png',
+    })
+
+    element.click(event => {
+      const id = $(event.target).attr('data-location-id')
+
+      if (id) {
+        calcRouteToLocation(mapLocations[id])
+
+        if (lastWindowOpen != null) {
+          lastWindowOpen.close()
+        }
+      }
+    })
+
+    function calcRouteToLocation(location) {
+      const start = new google.maps.LatLng(scope.homeLocation.lat, scope.homeLocation.lng)
+      const end = new google.maps.LatLng(location.lat, location.lng)
+      const bounds = new google.maps.LatLngBounds()
+      bounds.extend(start)
+      bounds.extend(end)
+
+      const request = {
+        origin: start,
+        destination: end,
+        travelMode: google.maps.TravelMode.DRIVING,
+      }
+      const directionsService = new google.maps.DirectionsService()
+
+      directionsService.route(request, (response, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+          map.fitBounds(bounds)
+          directionsDisplay.setDirections(response)
+          directionsDisplay.setOptions({suppressMarkers: true})
+          directionsDisplay.setMap(map)
+
+          scope.shouldShowCoverage = false
+          scope.$apply()
+        }
+      })
+    }
 
     function updateInfoWindows() {
       closerTypes = {}
@@ -200,6 +255,7 @@ angular.module('msMapsApp.directives.map', [])
 
       map.setCenter(new google.maps.LatLng(scope.homeLocation.lat, scope.homeLocation.lng))
       updateVisibility()
+      homeMarker.setPosition(scope.homeLocation)
     })
 
     scope.$watch('shouldShowDistanceInMiles', () => {
@@ -208,6 +264,10 @@ angular.module('msMapsApp.directives.map', [])
 
     scope.$watch('shouldShowClosestOnly', () => {
       updateVisibility()
+
+      if (scope.shouldShowClosestOnly) {
+        directionsDisplay.setMap(null)
+      }
     })
     scope.$watch('shouldShowMarkers', () => {
       updateVisibility()
