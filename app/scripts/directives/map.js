@@ -13,6 +13,7 @@ angular.module('msMapsApp.directives.map', [])
     shouldShowClosestOnly: '=',
     shouldShowMarkers: '=',
     shouldShowCoverage: '=',
+    travelMethod: '=',
   },
   link: function(scope, element, attrs) {
     'use strict'
@@ -189,7 +190,7 @@ angular.module('msMapsApp.directives.map', [])
       const request = {
         origin: start,
         destination: end,
-        travelMode: google.maps.TravelMode.DRIVING,
+        travelMode: google.maps.TravelMode[scope.travelMethod],
       }
       const directionsService = new google.maps.DirectionsService()
 
@@ -277,6 +278,10 @@ angular.module('msMapsApp.directives.map', [])
     })
     scope.$watch('locationType', () => {
       updateVisibility()
+    })
+    scope.$watch('travelMethod', () => {
+      map.setCenter(new google.maps.LatLng(scope.homeLocation.lat, scope.homeLocation.lng))
+      directionsDisplay.setMap(null)
     })
   },
 }))

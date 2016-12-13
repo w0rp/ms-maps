@@ -26,6 +26,10 @@ angular.module('msMapsApp.main', [
   vm.shouldShowDistanceInMiles = false
   vm.shouldShowMarkers = true
   vm.shouldShowCoverage = true
+  vm.driving = true
+  vm.walking = false
+  vm.transit = false
+  vm.travelMethod = 'DRIVING'
 
   function updateAddress(geocodeResults) {
     vm.formattedAddress = geocodeResults[0].formatted_address
@@ -84,5 +88,31 @@ angular.module('msMapsApp.main', [
 
       $scope.$digest()
     })
+  }
+
+  vm.updateTravelMethodToDriving = () => {
+
+      vm.walking = false
+      vm.transit = false
+      vm.driving = true
+      vm.travelMethod = 'DRIVING'
+
+  }
+
+  vm.updateTravelMethodToWalking = () => {
+      vm.driving = false
+      vm.transit = false
+      vm.walking = true
+      vm.travelMethod = 'WALKING'
+
+  }
+
+  vm.updateTravelMethodToTransit = () => {
+
+      vm.walking = false
+      vm.driving = false
+      vm.transit = true
+      vm.travelMethod = 'TRANSIT'
+
   }
 })

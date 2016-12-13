@@ -49,6 +49,22 @@
             </div>
         </form>
     </div>
+    <div class="col-md-3">
+        <form class="map-secondary-controls">
+            <div class="form-group">
+                <input type="checkbox" ng-model="vm.driving" ng-change="vm.updateTravelMethodToDriving()">
+                <label>Driving</label>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" ng-model="vm.walking" ng-change="vm.updateTravelMethodToWalking()">
+                <label>Walking</label>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" ng-model="vm.transit" ng-change="vm.updateTravelMethodToTransit()">
+                <label>Public Transport</label>
+            </div>
+        </form>
+    </div>
     <div class="col-md-12">
    </div>
 </div>
@@ -63,6 +79,7 @@
             should-show-closest-only="vm.shouldShowClosestOnly"
             should-show-markers="vm.shouldShowMarkers"
             should-show-coverage="vm.shouldShowCoverage"
+            travel-method="vm.travelMethod"
         ></google-maps-visualisation>
       </div>
    </div>
