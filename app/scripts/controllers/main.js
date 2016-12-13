@@ -91,28 +91,23 @@ angular.module('msMapsApp.main', [
   }
 
   vm.updateTravelMethodToDriving = () => {
-
-      vm.walking = false
-      vm.transit = false
-      vm.driving = true
-      vm.travelMethod = 'DRIVING'
-
+    vm.walking = false
+    vm.transit = false
+    vm.driving = true
+    vm.travelMethod = 'DRIVING'
   }
 
   vm.updateTravelMethodToWalking = () => {
-      vm.driving = false
-      vm.transit = false
-      vm.walking = true
-      vm.travelMethod = 'WALKING'
-
+    vm.driving = false
+    vm.transit = false
+    vm.walking = true
+    vm.travelMethod = 'WALKING'
   }
 
   vm.updateTravelMethodToTransit = () => {
-
-      vm.walking = false
-      vm.driving = false
-      vm.transit = true
-      vm.travelMethod = 'TRANSIT'
-
+    vm.walking = false
+    vm.driving = false
+    vm.transit = true
+    vm.travelMethod = 'TRANSIT'
   }
 })
