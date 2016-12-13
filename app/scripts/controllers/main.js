@@ -31,11 +31,14 @@ angular.module('msMapsApp.main', [
   vm.transit = false
   vm.travelMethod = 'DRIVING'
 
-  function updateAddress(geocodeResults) {
+  // Given some geocode results, update the address shown on the page.
+  const updateAddress = geocodeResults => {
     vm.formattedAddress = geocodeResults[0].formatted_address
   }
 
-  function lookupAddress(latLng) {
+  // Given a location, look up the full address name, etc, and update it
+  // on the page if we can find it.
+  const lookupAddress = latLng => {
     geocoder.geocode({location: latLng}, (results, status) => {
       if (status === 'OK') {
         updateAddress(results)
@@ -47,7 +50,10 @@ angular.module('msMapsApp.main', [
     })
   }
 
-  function getLocation(callback) {
+  // Given some callback for when we are done, determine the current location
+  // The HTML5 geolocation API will be used if available,
+  // and if all else fails we will use a constant default location instead.
+  const getLocation = callback => {
     if (navigator.geolocation == null) {
       callback(defaultLocation)
 
@@ -68,12 +74,17 @@ angular.module('msMapsApp.main', [
     )
   }
 
-  /* Get the location somehow, and update the address when we are done */
+  // Get the location somehow, and update the address when we are done
   getLocation(location => {
     vm.homeLocation = location
     lookupAddress(location)
   })
 
+  /**
+   * This method on the controller will run another address search when the
+   * address the user has typed is updated. If the lookup via Google Maps API
+   * succeeds, the user's location will be updated, which will update them map.
+   */
   vm.runAddressSearch = () => {
     geocoder.geocode({address: vm.address}, (results, status) => {
       if (status === 'OK') {
