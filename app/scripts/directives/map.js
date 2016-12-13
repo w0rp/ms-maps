@@ -11,6 +11,7 @@ angular.module('msMapsApp.directives.map', [])
     locationType: '=',
     shouldShowDistanceInMiles: '=',
     shouldShowClosestOnly: '=',
+    shouldShowMarkers: '=',
   },
   link: function(scope, element, attrs) {
     var closerTypes
@@ -86,7 +87,7 @@ angular.module('msMapsApp.directives.map', [])
       const visible = isLocationTypeSelected(location)
         && isLocationTypeInNearby(location)
 
-      location.marker.setVisible(visible)
+      location.marker.setVisible(visible && scope.shouldShowMarkers)
       location.circle.setVisible(visible)
     }
 
@@ -125,7 +126,7 @@ angular.module('msMapsApp.directives.map', [])
           map: map,
           radius: 4000,
           fillColor: '#' + (colorMap[item.type] || colorMap.branches),
-          fillOpacity: 0.05,
+          fillOpacity: 0.1,
           strokeWeight: 1,
           strokeColor: '#' + (colorMap[item.type] || colorMap.branches),
         })
@@ -205,6 +206,9 @@ angular.module('msMapsApp.directives.map', [])
     })
 
     scope.$watch('shouldShowClosestOnly', () => {
+      updateVisibility()
+    })
+    scope.$watch('shouldShowMarkers', () => {
       updateVisibility()
     })
 

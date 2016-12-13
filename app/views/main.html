@@ -20,7 +20,6 @@
                 <option value="support_groups">Support Groups</option>
                 <option value="information_events">Information Events</option>
                 <option value="fundraising_events">Fundraising Events</option>
-                <option value="financial_aid">Financial Aid</option>
                 <option value="branch_events">Branch Events</option>
             </select>
         </label>
@@ -31,6 +30,10 @@
         <label>
             Show closest groups only?
             <input type="checkbox" ng-model="vm.shouldShowClosestOnly">
+        </label>
+        <label>
+            Show markers?
+            <input type="checkbox" ng-model="vm.shouldShowMarkers">
         </label>
    </div>
 </div>
@@ -43,6 +46,7 @@
             location-type="vm.locationType"
             should-show-distance-in-miles="vm.shouldShowDistanceInMiles"
             should-show-closest-only="vm.shouldShowClosestOnly"
+            should-show-markers="vm.shouldShowMarkers"
         ></google-maps-visualisation>
       </div>
    </div>
