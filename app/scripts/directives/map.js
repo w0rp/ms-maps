@@ -12,6 +12,7 @@ angular.module('msMapsApp.directives.map', [])
     shouldShowDistanceInMiles: '=',
     shouldShowClosestOnly: '=',
     shouldShowMarkers: '=',
+    shouldShowCoverage: '=',
   },
   link: function(scope, element, attrs) {
     var closerTypes
@@ -88,7 +89,7 @@ angular.module('msMapsApp.directives.map', [])
         && isLocationTypeInNearby(location)
 
       location.marker.setVisible(visible && scope.shouldShowMarkers)
-      location.circle.setVisible(visible)
+      location.circle.setVisible(visible && scope.shouldShowCoverage)
     }
 
     function mapRender(newMapData) {
@@ -211,7 +212,9 @@ angular.module('msMapsApp.directives.map', [])
     scope.$watch('shouldShowMarkers', () => {
       updateVisibility()
     })
-
+    scope.$watch('shouldShowCoverage', () => {
+      updateVisibility()
+    })
     scope.$watch('locationType', () => {
       updateVisibility()
     })

@@ -23,6 +23,7 @@ angular.module('msMapsApp.main', [
   vm.homeLocation = defaultLocation
   vm.formattedAddress = ''
   vm.shouldShowMarkers = true
+  vm.shouldShowCoverage = true
 
   function updateAddress(geocodeResults) {
     vm.formattedAddress = geocodeResults[0].formatted_address

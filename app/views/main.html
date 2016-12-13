@@ -35,6 +35,10 @@
             Show markers?
             <input type="checkbox" ng-model="vm.shouldShowMarkers">
         </label>
+        <label>
+            Show coverage?
+            <input type="checkbox" ng-model="vm.shouldShowCoverage">
+        </label>
    </div>
 </div>
 <div class="row">
@@ -47,6 +51,7 @@
             should-show-distance-in-miles="vm.shouldShowDistanceInMiles"
             should-show-closest-only="vm.shouldShowClosestOnly"
             should-show-markers="vm.shouldShowMarkers"
+            should-show-coverage="vm.shouldShowCoverage"
         ></google-maps-visualisation>
       </div>
    </div>
