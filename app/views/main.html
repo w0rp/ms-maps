@@ -28,6 +28,10 @@
             Show distance in miles?
             <input type="checkbox" ng-model="vm.shouldShowDistanceInMiles">
         </label>
+        <label>
+            Show closest groups only?
+            <input type="checkbox" ng-model="vm.shouldShowClosestOnly">
+        </label>
    </div>
 </div>
 <div class="row">
@@ -38,6 +42,7 @@
             home-location="vm.homeLocation"
             location-type="vm.locationType"
             should-show-distance-in-miles="vm.shouldShowDistanceInMiles"
+            should-show-closest-only="vm.shouldShowClosestOnly"
         ></google-maps-visualisation>
       </div>
    </div>

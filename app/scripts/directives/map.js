@@ -10,8 +10,10 @@ angular.module('msMapsApp.directives.map', [])
     homeLocation: '=',
     locationType: '=',
     shouldShowDistanceInMiles: '=',
+    shouldShowClosestOnly: '=',
   },
   link: function(scope, element, attrs) {
+    var closerTypes
     const milesCoefficient = 0.621371
     const societyURL = 'https://www.mssociety.org.uk'
     const markerBaseURL = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"
@@ -73,12 +75,20 @@ angular.module('msMapsApp.directives.map', [])
 
     const mapLocations = {}
 
-    function setLocationVisibility(location) {
-      const visibility = scope.locationType === 'all'
-        || location.type === scope.locationType
+    const isLocationTypeSelected = location => scope.locationType === 'all'
+      || location.type === scope.locationType
 
-      location.marker.setVisible(visibility)
-      location.circle.setVisible(visibility)
+    const isLocationTypeInNearby = location => !scope.shouldShowClosestOnly
+      || Object.keys(closerTypes)
+        .map(key => closerTypes[key].id)
+        .indexOf(location.id) >= 0
+
+    function setLocationVisibility(location) {
+      const visible = isLocationTypeSelected(location)
+        && isLocationTypeInNearby(location)
+
+      location.marker.setVisible(visible)
+      location.circle.setVisible(visible)
     }
 
     function mapRender(newMapData) {
@@ -109,6 +119,7 @@ angular.module('msMapsApp.directives.map', [])
           title: item.title,
           icon: markerImage,
         })
+        location.id = itemKey
 
         // Add circle overlay and bind to marker
         location.circle = new google.maps.Circle({
@@ -140,7 +151,7 @@ angular.module('msMapsApp.directives.map', [])
     const map = mapRender(scope.val)
 
     function updateInfoWindows() {
-      var closerTypes = {
+      closerTypes = {
         branches: {id: null, distance: null},
         specialists: {id: null, distance: null},
         treatments: {id: null, distance: null},
@@ -160,9 +171,9 @@ angular.module('msMapsApp.directives.map', [])
         }
         const metersDistance = getDistance(scope.homeLocation, locationCoords)
 
-        if (closerTypes[location.type].id == null || closerTypes[location.type]['distance'] > metersDistance) {
+        if (closerTypes[location.type].id == null || closerTypes[location.type].distance > metersDistance) {
           closerTypes[location.type].id = itemKey
-          closerTypes[location.type]['distance'] = metersDistance
+          closerTypes[location.type].distance = metersDistance
         }
 
         location.infoWindow.setContent(
@@ -175,9 +186,11 @@ angular.module('msMapsApp.directives.map', [])
             .replace('<a', '<a target="_blank"')
         )
       })
+
+      return closerTypes
     }
 
-    updateInfoWindows()
+    closerTypes = updateInfoWindows()
 
     function updateVisibility() {
       Object.keys(mapLocations)
@@ -195,6 +208,10 @@ angular.module('msMapsApp.directives.map', [])
 
     scope.$watch('shouldShowDistanceInMiles', () => {
       updateInfoWindows()
+    })
+
+    scope.$watch('shouldShowClosestOnly', () => {
+      updateVisibility()
     })
 
     scope.$watch('locationType', () => {
