@@ -22,6 +22,8 @@ angular.module('msMapsApp.main', [
   vm.locationType = 'branches'
   vm.homeLocation = defaultLocation
   vm.formattedAddress = ''
+  vm.unitType = 'kilometres'
+  vm.shouldShowDistanceInMiles = false
   vm.shouldShowMarkers = true
   vm.shouldShowCoverage = true
 

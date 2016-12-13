@@ -4,41 +4,52 @@
    </div>
 </div>
 <div class="row map-controls">
+    <div class="col-md-3">
+        <form class="map-main-controls">
+            <div class="form-group">
+                <label for="address-field">Address:</label>
+                <input id="address-field" type="text" ng-model="vm.address" ng-model-options="{debounce: 1000}" ng-change="vm.runAddressSearch()" >
+            </div>
+            <div class="form-group">
+                <label for="location-field">Location Type:</label>
+                <select id="location-field" ng-model="vm.locationType" ng-model-options="{debounce: 1000}">
+                    <option value="all">All</option>
+                    <option value="branches">Branches</option>
+                    <option value="specialists">Specialists</option>
+                    <option value="treatments">Treatments</option>
+                    <option value="information_points">Information Points</option>
+                    <option value="support_groups">Support Groups</option>
+                    <option value="information_events">Information Events</option>
+                    <option value="fundraising_events">Fundraising Events</option>
+                    <option value="branch_events">Branch Events</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="units-field">Units:</label>
+                <select id="units-field" ng-model="vm.unitType" ng-change="vm.shouldShowDistanceInMiles = vm.unitType === 'miles'">
+                    <option value="kilometres">kilometres</option>
+                    <option value="miles">miles</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-3">
+        <form class="map-secondary-controls">
+            <div class="form-group">
+                <input id="closest-field" type="checkbox" ng-model="vm.shouldShowClosestOnly">
+                <label for="closest-field">Show closest groups only?</label>
+            </div>
+            <div class="form-group">
+                <input id="show-markers-field" type="checkbox" ng-model="vm.shouldShowMarkers">
+                <label for="show-markers-field">Show markers?</label>
+            </div>
+            <div class="form-group">
+                <input id="show-coverage-field" type="checkbox" ng-model="vm.shouldShowCoverage">
+                <label for="show-coverage-field">Show coverage?</label>
+            </div>
+        </form>
+    </div>
     <div class="col-md-12">
-        <label>
-            Enter an Address:
-            <input type="text" ng-model="vm.address" ng-model-options="{debounce: 1000}" ng-change="vm.runAddressSearch()" >
-        </label>
-        <label>
-            Select a Location Type:
-            <select ng-model="vm.locationType" ng-model-options="{debounce: 1000}">
-                <option value="all">All</option>
-                <option value="branches">Branches</option>
-                <option value="specialists">Specialists</option>
-                <option value="treatments">Treatments</option>
-                <option value="information_points">Information Points</option>
-                <option value="support_groups">Support Groups</option>
-                <option value="information_events">Information Events</option>
-                <option value="fundraising_events">Fundraising Events</option>
-                <option value="branch_events">Branch Events</option>
-            </select>
-        </label>
-        <label>
-            Show distance in miles?
-            <input type="checkbox" ng-model="vm.shouldShowDistanceInMiles">
-        </label>
-        <label>
-            Show closest groups only?
-            <input type="checkbox" ng-model="vm.shouldShowClosestOnly">
-        </label>
-        <label>
-            Show markers?
-            <input type="checkbox" ng-model="vm.shouldShowMarkers">
-        </label>
-        <label>
-            Show coverage?
-            <input type="checkbox" ng-model="vm.shouldShowCoverage">
-        </label>
    </div>
 </div>
 <div class="row">
